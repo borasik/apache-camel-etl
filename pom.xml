@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project xmlns="http://maven.apache.org/POM/4.0.0"
-	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 	<parent>
 		<groupId>org.springframework.boot</groupId>
@@ -69,7 +68,7 @@
 		</dependency>
 		<dependency>
 			<groupId>org.apache.camel.springboot</groupId>
-  			<artifactId>camel-netty-http-starter</artifactId>
+			<artifactId>camel-netty-http-starter</artifactId>
 		</dependency>
 		<dependency>
 			<groupId>org.apache.camel</groupId>
@@ -99,9 +98,28 @@
 					<artifactId>junit-vintage-engine</artifactId>
 				</exclusion>
 			</exclusions>
-		</dependency>	
+		</dependency>
+		<dependency>
+			<groupId>org.apache.camel</groupId>
+			<artifactId>camel-jdbc</artifactId>
+			<version>3.5.0</version>
+		</dependency>
+		<dependency>
+			<groupId>org.apache.commons</groupId>
+			<artifactId>commons-dbcp2</artifactId>
+			<version>2.8.0</version>
+		</dependency>
+		<dependency>
+			<groupId>com.oracle.database.jdbc</groupId>
+			<artifactId>ojdbc8</artifactId>
+			<version>19.6.0.0</version>
+		</dependency>
+		<dependency>
+			<groupId>com.oracle.database.jdbc</groupId>
+			<artifactId>ucp</artifactId>
+			<version>19.6.0.0</version>
+		</dependency>
 	</dependencies>
-
 	<build>
 		<plugins>
 			<plugin>
@@ -112,24 +130,24 @@
 				<artifactId>maven-dependency-plugin</artifactId>
 				<executions>
 					<execution>
-					<phase>prepare-package</phase>
-					<goals>
-						<goal>copy</goal>
-					</goals>
-					<configuration>
-						<useBaseVersion>true</useBaseVersion>
-						<artifactItems>
-							<artifactItem>
-								<groupId>io.prometheus.jmx</groupId>
-								<artifactId>jmx_prometheus_javaagent</artifactId>
-								<version>0.14.0</version>
-								<outputDirectory>${project.build.directory}/docker/build/maven/agent</outputDirectory>
-							</artifactItem>
-						</artifactItems>
-					</configuration>
+						<phase>prepare-package</phase>
+						<goals>
+							<goal>copy</goal>
+						</goals>
+						<configuration>
+							<useBaseVersion>true</useBaseVersion>
+							<artifactItems>
+								<artifactItem>
+									<groupId>io.prometheus.jmx</groupId>
+									<artifactId>jmx_prometheus_javaagent</artifactId>
+									<version>0.14.0</version>
+									<outputDirectory>${project.build.directory}/docker/build/maven/agent</outputDirectory>
+								</artifactItem>
+							</artifactItems>
+						</configuration>
 					</execution>
 				</executions>
-				</plugin>
+			</plugin>
 		</plugins>
 	</build>
 

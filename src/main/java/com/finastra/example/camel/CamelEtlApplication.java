@@ -12,13 +12,16 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.stereotype.Component;
 
+import javax.sql.DataSource;
+import org.apache.commons.dbcp2.BasicDataSource; 
+
 import lombok.Data;
 
 @SpringBootApplication
 public class CamelEtlApplication {
-
+	
 	public static void main(String[] args) {
-		SpringApplication.run(CamelEtlApplication.class, args);
+		SpringApplication.run(CamelEtlApplication.class, args);	
 	}
 
 	@Bean
@@ -49,4 +52,14 @@ public class CamelEtlApplication {
 		private String blobEndpointUri;
 		private String blobSasToken;
 	}
+
+	@Bean
+	private static DataSource setupDataSource() {
+        BasicDataSource ds = new BasicDataSource();
+        ds.setDriverClassName("oracle.jdbc.driver.OracleDriver");
+        ds.setUsername("FCC5560");
+        ds.setPassword("FCC5560");
+        ds.setUrl("jdbc:oracle:thin:@10.192.70.236:1521/FCC");
+        return ds;
+    }
 }

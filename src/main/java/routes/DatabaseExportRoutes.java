@@ -1,7 +1,9 @@
-package com.finastra.example.camel;
+package routes;
 
 import com.azure.storage.blob.BlobServiceClient;
 import com.azure.storage.blob.BlobServiceClientBuilder;
+import com.finastra.example.camel.CovidDataRowProcessor;
+import com.finastra.example.camel.DtoJsonLineAggregator;
 import com.finastra.example.camel.CamelEtlApplication.AzureStorageSettings;
 import com.finastra.example.camel.CamelEtlApplication.ExtractSettings;
 
