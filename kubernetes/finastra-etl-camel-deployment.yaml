@@ -1,0 +1,75 @@
+
+
+apiVersion: networking.k8s.io/v1beta1
+kind: Ingress
+metadata:
+  annotations:
+    kubernetes.io/ingress.class: private
+    nginx.ingress.kubernetes.io/ssl-passthrough: "true"
+    nginx.ingress.kubernetes.io/ssl-redirect: "true"
+  name: camel-hawtio-ingress
+  namespace: camel-poc
+spec:
+  rules:
+    - host: camel-hawtio.p01d15204506001.c01.dev.provides.io
+      http:
+        paths:
+          - backend:
+              serviceName: camel-hawtio-service
+              servicePort: 80
+  tls:
+    - hosts:
+        - camel-hawtio.p01d15204506001.c01.dev.provides.io
+status:
+  loadBalancer: {}
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: camel-hawtio-service
+  namespace: camel-poc
+spec:
+  ports:
+    - protocol: TCP
+      port: 80
+      targetPort: 10001
+  selector:
+    app: finastraetlcamel
+---
+
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: finastraetlcamel
+  namespace: camel-poc
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app:  finastraetlcamel
+  strategy:
+    rollingUpdate:
+      maxSurge: 1
+      maxUnavailable: 1
+  minReadySeconds: 5 
+  template:
+    metadata:
+      labels:
+        app: finastraetlcamel
+    spec:
+      containers:
+      - name: finastra-etl-camel
+        image: dataplatformdevacr.azurecr.io/camelimages:v5
+        resources:
+          requests:
+            cpu: 250m
+          limits:
+            cpu: 500m
+        ports:
+        - containerPort: 80
+          name: http
+        - containerPort: 9779
+          name: camel-metrics
+        imagePullPolicy: Always    
+      imagePullSecrets:
+      - name: camel-poc-acr-secret 
