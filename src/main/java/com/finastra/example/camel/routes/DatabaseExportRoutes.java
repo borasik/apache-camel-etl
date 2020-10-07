@@ -1,4 +1,4 @@
-package routes;
+package com.finastra.example.camel.routes;
 
 import com.azure.storage.blob.BlobServiceClient;
 import com.azure.storage.blob.BlobServiceClientBuilder;
@@ -36,9 +36,9 @@ public class DatabaseExportRoutes extends RouteBuilder {
             .wireTap("bean:exitHandler?method=errorShutdown")
             .stop();
 
-        from("timer://runOnce?repeatCount=1").to("direct:bounded-sql-to-dto-stream");
+        from("timer://runOnce?repeatCount=1").noAutoStartup().to("direct:bounded-sql-to-dto-stream");
 
-        from("direct:bounded-sql-to-dto-stream").routeId("bounded-sql-to-dto-stream")
+        from("direct:bounded-sql-to-dto-stream").noAutoStartup().routeId("bounded-sql-to-dto-stream")
             .setHeader("resultLimit", constant(extractSettings.getResultLimit()))
             .to("sql:classpath:sql/covid-extract.sql")
             .log(LoggingLevel.DEBUG, "query.resultSet = ${body}")
@@ -47,7 +47,7 @@ public class DatabaseExportRoutes extends RouteBuilder {
                 .process(new CovidDataRowProcessor())
                 .to("direct:dto-stream-to-jsonlines-file");
 
-        from("direct:dto-stream-to-jsonlines-file").routeId("dto-stream-to-jsonlines-file")
+        from("direct:dto-stream-to-jsonlines-file").noAutoStartup().routeId("dto-stream-to-jsonlines-file")
                 .log(LoggingLevel.DEBUG, "record.dto = ${body}")
                 .aggregate(constant(true), AggregationStrategies.beanAllowNull(jsonLineAggregator, "append"))
                     .completionSize(extractSettings.getOutputBatchSize().toString())
@@ -58,7 +58,7 @@ public class DatabaseExportRoutes extends RouteBuilder {
 
         from("file:" + extractSettings.getBatchPath()
                 + "?doneFileName=${file:name}.ready&idempotent=true&idempotentRepository=#fileIdempotentRepository")
-                    .routeId("file-to-blobstorage")
+                    .routeId("file-to-blobstorage").noAutoStartup()
                     .process((exchange) -> {exchange.setProperty("ReadableCamelBatchIndex",
                                             ((Integer) exchange.getProperty("CamelBatchIndex")) + 1);})
                     .log(LoggingLevel.INFO, "Uploading file ${header.CamelFileName}, to Azure Blob Storage - " 
@@ -74,7 +74,7 @@ public class DatabaseExportRoutes extends RouteBuilder {
                             .when(simple("${header.CamelBatchComplete} == 'true'"))
                             .to("direct:signal-ingest-api");
 
-        from("direct:signal-ingest-api").routeId("signal-ingest-api")
+        from("direct:signal-ingest-api").routeId("signal-ingest-api").noAutoStartup()
             .log(LoggingLevel.INFO, "All files uploaded to Azure. Starting ingest...")
             .process((exchange) -> {
                 exchange.getMessage().setBody("{ \"status\": \"COMPLETE_UPLOAD\" }");

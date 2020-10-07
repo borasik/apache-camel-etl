@@ -14,6 +14,7 @@ import lombok.Data;
 public class OracleExtractSettings {
     private String outputPath;   
     private Long outputBatchSize;
+    private Long resultLimit;
     
     public String getBatchPath() { return outputPath + "/" + new SimpleDateFormat("yyyyMMdd_hhmmss").format(new Date()); }
 }

@@ -1,2 +1,2 @@
-select ACCOUNT_ID,STATEMENT_ID,BRCH_CODE,TYPE,IDX,SEQ_IDX,DESCRIPTION,VALUE_DATE FROM GTP_ACCOUNT_STATEMENT
-WHERE ROWNUM <= #resultLimit
+select acc.*,ent.* from gtp_account acc join gtp_entity_account ent on acc.account_id = ent.account_id
+WHERE rownum <= 10
