@@ -13,6 +13,7 @@ import lombok.Data;
 @ConfigurationProperties(prefix = "oracle.extract")
 public class OracleExtractSettings {
     private String outputPath;   
+    private Long outputBatchSize;
     
     public String getBatchPath() { return outputPath + "/" + new SimpleDateFormat("yyyyMMdd_hhmmss").format(new Date()); }
 }
