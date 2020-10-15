@@ -31,7 +31,7 @@ public class DtoJsonLineAggregator {
                 collector = new ByteArrayOutputStream();
             }
 
-            log.info("Appending covid.json = {}", record);
+            log.info("Appending new Record = {}", record);
             objectMapper.writeValue(collector, record);
             collector.write(NEW_LINE);
 

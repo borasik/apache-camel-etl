@@ -2,7 +2,7 @@ package com.finastra.example.camel.routes;
 
 import com.azure.storage.blob.BlobServiceClient;
 import com.azure.storage.blob.BlobServiceClientBuilder;
-import com.finastra.example.camel.CovidDataRowProcessor;
+import com.finastra.example.camel.processors.CovidDataRowProcessor;
 import com.finastra.example.camel.DtoJsonLineAggregator;
 import com.finastra.example.camel.CamelEtlApplication.AzureStorageSettings;
 import com.finastra.example.camel.CamelEtlApplication.ExtractSettings;
@@ -92,7 +92,7 @@ public class DatabaseExportRoutes extends RouteBuilder {
     }
 
     @Bean
-    BlobServiceClient blobServiceClient() {
+    BlobServiceClient blobServiceClient() {        
         final BlobServiceClient blobServiceClient = new BlobServiceClientBuilder()
                 .endpoint(azureStorageSettings.getBlobEndpointUri()).sasToken(azureStorageSettings.getBlobSasToken())
                 .buildClient();

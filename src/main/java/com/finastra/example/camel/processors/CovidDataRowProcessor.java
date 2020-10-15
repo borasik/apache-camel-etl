@@ -1,4 +1,4 @@
-package com.finastra.example.camel;
+package com.finastra.example.camel.processors;
 
 import java.util.Map;
 
