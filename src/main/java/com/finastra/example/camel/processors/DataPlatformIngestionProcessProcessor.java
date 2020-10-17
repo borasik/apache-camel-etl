@@ -32,5 +32,4 @@ public class DataPlatformIngestionProcessProcessor implements Processor {
             log.error("Failed To Retrieve Access Token");
         }                
     }
-
 }
