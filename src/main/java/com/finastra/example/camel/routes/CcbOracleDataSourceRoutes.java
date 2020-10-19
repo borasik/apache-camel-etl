@@ -83,7 +83,7 @@ public class CcbOracleDataSourceRoutes extends RouteBuilder {
         .setHeader("CamelHttpMethod", constant("POST")).setHeader("Accept", constant("application/json"))
         .setHeader("Content-Type", constant("application/json"))
         .setHeader("Authorization", simple("Bearer ${header.AccessToken}"))
-        .to("netty-http:" + ffdcPlatformSettings.getIngestionJobUrl()).unmarshal().json(JsonLibrary.Jackson)        
+        .to("netty-http:" + ffdcPlatformSettings.getIngestionJobUrl()).unmarshal().json(JsonLibrary.Jackson)
         .process((exchange) -> {
                    var body = exchange.getIn().getBody(Map.class);
                    String sas = body.get("singleUseToken").toString();
@@ -115,9 +115,10 @@ public class CcbOracleDataSourceRoutes extends RouteBuilder {
         .setHeader("Content-Type", constant("application/json"))
         .setHeader("x-ms-blob-type", constant("BlockBlob"))  
         .setHeader("CamelHttpUrl", simple("${exchangeProperty.fullUrl}"))   
-        .log(LoggingLevel.INFO, "URL_TO_BLOB: " + "${exchangeProperty.fullUrl}")
-        //.toD("netty-http: ${exchangeProperty.fullUrl}");        
-        .toD("netty-http: https://p21q11101547001.blob.core.windows.net/c2896825-c0d8-408d-82b5-0470c6a1e44f/bcc148bf-3236-49cc-aa5e-9410f0d483b1?sv=2019-12-12&ss=b&srt=co&sp=wx&se=2020-10-29T23:45:27Z&st=2020-10-08T15:45:27Z&spr=https&sig=Dp0S03%2FtX5pTsMemiJUP3iMDId3SLGdmSgl9iZf8cS4%3D");
+        .log(LoggingLevel.INFO, "URL_TO_BLOB: " + "${exchangeProperty.fullUrl}")       
+        .delay(10000)
+        .toD("netty-http: ${exchangeProperty.fullUrl}");  
+        //.toD("netty-http: https://p21q11101547001.blob.core.windows.net/c2896825-c0d8-408d-82b5-0470c6a1e44f/bcc148bf-3236-49cc-aa5e-9410f0d483b1?sv=2019-12-12&ss=b&srt=o&sp=wx&se=2020-10-20T21:14:22Z&st=2020-10-18T13:14:22Z&spr=https&sig=sPvK6a3MffGQTw49aTu9yHmR1E2Z9ToCM5tEGwsGWZM%3D");
 
     }
 }
